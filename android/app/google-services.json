@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "562732247934",
+    "firebase_url": "https://samakibay-default-rtdb.firebaseio.com",
+    "project_id": "samakibay",
+    "storage_bucket": "samakibay.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562732247934:android:19b23a604a2b3c0718a12f",
+        "android_client_info": {
+          "package_name": "com.myasma01.samakibay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "562732247934-u5i3sk7ffppgh9flb6gm2109fa7odp6q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAia-S-wjqMyu-rBDhGAGjfcf0YJ26thxY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "562732247934-u5i3sk7ffppgh9flb6gm2109fa7odp6q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
