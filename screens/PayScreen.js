@@ -23,7 +23,7 @@ export default function PayScreen({ navigation, route }) {
     setAmount(text);
   };
 
-  const handlePayNowPress = () => {
+  const handlePayNowPress = async () => {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -40,10 +40,41 @@ export default function PayScreen({ navigation, route }) {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        sendPushNotification();
         navigation.navigate("Map"); // navigate to "Map" screen
       })
       .catch((error) => console.log(error));
   };
+
+  async function sendPushNotification() {
+    const message = {
+      to: "fYqXWLBSSe6QeBWBAJZ7Ya:APA91bF-8PNlGNtIPEeXOSPA28KQsy-53DhOt9L0XHTbM9hUZmNPY2wNbgJS80NO5soBORnn3n4nwW_ncog8STcemgbFOp5HYvBl4SnwOU8pvaTBfY3xz7d77Bf5yCHr8-mtfHCqFwIs",
+      priority: "normal",
+      data: {
+        experienceId: "@myasma01/samaki-bay",
+        scopeKey: "@myasma01/samaki-bay",
+        title: "You've got mail",
+        message: "Hello world! ",
+      },
+    };
+
+    try {
+      const response = await fetch("https://fcm.googleapis.com/fcm/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "key=AAAAgwV0q34:APA91bFZlMb5Qyn44-uizBCtot0QvNBRDShGRkwr4vxrXCgCKiUDYZt4mUxOsL6BKuJj-8Eq8sGhR8PXp16LZkTTMWFD2NYvr9PjtXK1jUSOr0pFwt-mYR9kdWxdUFmioidj-YdmLqjl",
+        },
+        body: JSON.stringify(message),
+      });
+
+      const data = await response.json();
+      console.log("Push notification response:", data);
+    } catch (error) {
+      console.log("Error sending push notification:", error);
+    }
+  }
 
   return (
     <View style={styles.container}>
