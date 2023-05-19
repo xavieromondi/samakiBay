@@ -13,6 +13,7 @@
     "@react-navigation/native-stack": "^6.9.12",
     "@sanity/client": "^6.1.0",
     "@sanity/image-url": "^1.0.2",
+    "eas-cli": "^3.13.0",
     "event-source-polyfill": "^1.0.31",
     "expo": "~48.0.15",
     "expo-location": "^15.1.1",
