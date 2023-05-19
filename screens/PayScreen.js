@@ -48,7 +48,7 @@ export default function PayScreen({ navigation, route }) {
 
   async function sendPushNotification() {
     const message = {
-      to: "814499942835",
+      to: " ExponentPushToken[8xTOb2F7efcLbb9mrwP-Yl]",
       priority: "normal",
       data: {
         experienceId: "@myasma01/samaki-bay",
