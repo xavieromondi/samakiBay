@@ -48,7 +48,7 @@ export default function PayScreen({ navigation, route }) {
 
   async function sendPushNotification() {
     const message = {
-      to: " ExponentPushToken[8xTOb2F7efcLbb9mrwP-Yl]",
+      to: "fYqXWLBSSe6QeBWBAJZ7Ya:APA91bF-8PNlGNtIPEeXOSPA28KQsy-53DhOt9L0XHTbM9hUZmNPY2wNbgJS80NO5soBORnn3n4nwW_ncog8STcemgbFOp5HYvBl4SnwOU8pvaTBfY3xz7d77Bf5yCHr8-mtfHCqFwIs",
       priority: "normal",
       data: {
         experienceId: "@myasma01/samaki-bay",
@@ -64,7 +64,7 @@ export default function PayScreen({ navigation, route }) {
         headers: {
           "Content-Type": "application/json",
           Authorization:
-            "key=AAAAvaP60bM:APA91bG6ES1i5BC4ak7iY9bU2cWRhS0HD_L_byXEIatK2dynHXsSZSuxX7K0SjXEc4PIAaqTg0TmZfMsD0yJUOCNJIRaNcthSOGmqOLd3XRjpy1QGE1WHJaFJnFF8NSkgzI4WWeKSZNo",
+            "key=AAAAgwV0q34:APA91bFZlMb5Qyn44-uizBCtot0QvNBRDShGRkwr4vxrXCgCKiUDYZt4mUxOsL6BKuJj-8Eq8sGhR8PXp16LZkTTMWFD2NYvr9PjtXK1jUSOr0pFwt-mYR9kdWxdUFmioidj-YdmLqjl",
         },
         body: JSON.stringify(message),
       });
