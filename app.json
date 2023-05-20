@@ -18,7 +18,7 @@
       "bundleIdentifier": "com.myasma01.samakibay"
     },
     "android": {
-      "googleServicesFile": "./android/google-services (4).json",
+      "googleServicesFile": "./android/app/google-services (4).json",
 
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
