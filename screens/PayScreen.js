@@ -23,27 +23,9 @@ export default function PayScreen({ navigation, route }) {
     setAmount(text);
   };
 
-  const handlePayNowPress = async () => {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        phone: number,
-        amount: amount,
-      }),
-    };
-
-    fetch(
-      "https://fishbay-daraja-sandbox-production.up.railway.app/stk",
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        sendPushNotification();
-        navigation.navigate("Map"); // navigate to "Map" screen
-      })
-      .catch((error) => console.log(error));
+  const handlePayNowPress = () => {
+    sendPushNotification();
+    navigation.navigate("Map"); // navigate to "Map" screen
   };
 
   async function sendPushNotification() {
