@@ -30,7 +30,7 @@ export default function PayScreen({ navigation, route }) {
 
   async function sendPushNotification() {
     const message = {
-      to: "Expo Push Token: fYqXWLBSSe6QeBWBAJZ7Ya:APA91bF-8PNlGNtIPEeXOSPA28KQsy-53DhOt9L0XHTbM9hUZmNPY2wNbgJS80NO5soBORnn3n4nwW_ncog8STcemgbFOp5HYvBl4SnwOU8pvaTBfY3xz7d77Bf5yCHr8-mtfHCqFwIs",
+      to: "fYqXWLBSSe6QeBWBAJZ7Ya:APA91bG9Aqdu7NIOLJ8qfuhxdYxxbtKfptv4YDWRoOd-JTDmV-tTXKaovCgwumeFSYOELB20kfRnY_2S1xwbjAcf8GMItb_IEVI9BppA5GQjlZ7FcWQk7KCKfeMTuV_8xqUA-OAWcFqo",
       priority: "normal",
       data: {
         experienceId: "@myasma01/samaki-bay",
