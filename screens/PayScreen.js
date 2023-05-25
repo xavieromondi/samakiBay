@@ -1,5 +1,7 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import { OneSignal } from "react-native-onesignal";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,8 +14,29 @@ import {
 import mpesaLogo from "../assets/safaricom-mpesa.jpg";
 
 export default function PayScreen({ navigation, route }) {
+  const API_KEY = "ZmRmYmQ3NTYtZjcxZC00OWMyLTg5ZDAtNTY4MzI4MDgyZGUz";
+  const ONESIGNAL_APP_ID = "43ad2f5a-8798-4773-bc8b-6ed3de961eca";
+  const BASE_URL = "https://onesignal.com/api/v1";
+
   const [number, setNumber] = useState("0797211187");
   const [amount, setAmount] = useState(route.params.totalAmount);
+
+  useEffect(() => {
+    // Initialize OneSignal
+    OneSignal.setAppId("43ad2f5a-8798-4773-bc8b-6ed3de961eca");
+
+    // Add event listeners
+    OneSignal.addEventListener("received", onReceived);
+    OneSignal.addEventListener("opened", onOpened);
+    OneSignal.addEventListener("ids", onIds);
+
+    return () => {
+      // Remove event listeners
+      OneSignal.removeEventListener("received", onReceived);
+      OneSignal.removeEventListener("opened", onOpened);
+      OneSignal.removeEventListener("ids", onIds);
+    };
+  }, []);
 
   const handleNumberChange = (text) => {
     setNumber(text);
@@ -23,40 +46,82 @@ export default function PayScreen({ navigation, route }) {
     setAmount(text);
   };
 
-  const handlePayNowPress = () => {
-    sendPushNotification();
-    navigation.navigate("Map"); // navigate to "Map" screen
+  const optionsBuilder = (method, path, body) => {
+    return {
+      method,
+      url: `${BASE_URL}/${path}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${API_KEY}`,
+      },
+      body: body ? JSON.stringify(body) : null,
+    };
   };
 
-  async function sendPushNotification() {
-    const message = {
-      to: "fYqXWLBSSe6QeBWBAJZ7Ya:APA91bG9Aqdu7NIOLJ8qfuhxdYxxbtKfptv4YDWRoOd-JTDmV-tTXKaovCgwumeFSYOELB20kfRnY_2S1xwbjAcf8GMItb_IEVI9BppA5GQjlZ7FcWQk7KCKfeMTuV_8xqUA-OAWcFqo",
-      priority: "normal",
+  const createNotification = async (data) => {
+    const options = optionsBuilder("post", "notifications", data);
+    try {
+      const response = await axios(options);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return error;
+    }
+  };
+
+  const viewNotification = async (notificationId) => {
+    const path = `notifications/${notificationId}?app_id=${ONESIGNAL_APP_ID}`;
+    const options = optionsBuilder("get", path);
+    try {
+      const response = await axios(options);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handlePayNowPress = async () => {
+    const notificationData = {
+      app_id: ONESIGNAL_APP_ID,
+      included_segments: ["Subscribed Users"],
       data: {
-        experienceId: "@myasma01/samaki-bay",
-        scopeKey: "@myasma01/samaki-bay",
-        title: "You've got mail",
-        message: "Hello world! ",
+        foo: "bar",
+      },
+      contents: {
+        en: "Sample Push Message",
       },
     };
 
     try {
-      const response = await fetch("https://fcm.googleapis.com/fcm/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization:
-            "key=AAAAgwV0q34:APA91bFZlMb5Qyn44-uizBCtot0QvNBRDShGRkwr4vxrXCgCKiUDYZt4mUxOsL6BKuJj-8Eq8sGhR8PXp16LZkTTMWFD2NYvr9PjtXK1jUSOr0pFwt-mYR9kdWxdUFmioidj-YdmLqjl",
-        },
-        body: JSON.stringify(message),
-      });
+      const { id } = await createNotification(notificationData);
+      console.log("Notification created with ID:", id);
 
-      const data = await response.json();
-      console.log("Push notification response:", data);
+      const pushNotification = {
+        contents: { en: "Hello world!" },
+        include_external_user_ids: ["314058240583"], // Replace with the user ID of the receiver app
+        priority: 10,
+      };
+
+      const response = await OneSignal.sendPush(pushNotification);
+      console.log("Push notification sent successfully:", response);
     } catch (error) {
-      console.log("Error sending push notification:", error);
+      console.error("Error sending push notification:", error);
     }
-  }
+
+    navigation.navigate("Map"); // navigate to "Map" screen
+  };
+
+  const onReceived = (notification) => {
+    console.log("Notification received:", notification);
+  };
+
+  const onOpened = (openResult) => {
+    console.log("Notification opened by the user:", openResult);
+  };
+
+  const onIds = (device) => {
+    console.log("Device info:", device);
+  };
 
   return (
     <View style={styles.container}>
