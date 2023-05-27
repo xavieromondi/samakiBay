@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { urlFor } from "../sanity";
 import { CartContext } from "../CartContext";
+import { collection, addDoc, doc, setDoc, getDoc } from "firebase/firestore";
+import { db, authentication } from "../firebase";
 
 const CartScreen = ({ navigation }) => {
   const { state, dispatch } = useContext(CartContext);
@@ -21,6 +23,45 @@ const CartScreen = ({ navigation }) => {
       type: "SET_CART_ITEMS",
       payload: updatedCartItems,
     });
+  };
+  const handleCheckout = async () => {
+    try {
+      // Get the current user's UID
+      const uid = authentication.currentUser.uid;
+
+      // Save the order to Firebase
+      const order = {
+        items: state.cartItems,
+        totalAmount: state.cartItems.reduce(
+          (total, item) => total + item.price,
+          0
+        ),
+        timestamp: new Date().getTime(),
+      };
+
+      // Save the order to the "orders" collection
+      const orderRef = await addDoc(collection(db, "orders"), order);
+
+      // Save the order ID to the user's document
+      const userDocRef = doc(db, "users", uid);
+      const userDocSnapshot = await getDoc(userDocRef);
+
+      if (userDocSnapshot.exists()) {
+        // User document exists, update the orderId field
+        await setDoc(userDocRef, { orderId: orderRef.id }, { merge: true });
+      } else {
+        // User document does not exist, create a new user document
+        await setDoc(userDocRef, { orderId: orderRef.id });
+      }
+
+      // Navigate to the PayScreen
+      navigation.navigate("Pay", {
+        orderId: orderRef.id,
+        totalAmount: order.totalAmount,
+      });
+    } catch (error) {
+      console.log("Error saving order:", error);
+    }
   };
 
   return (
@@ -51,14 +92,7 @@ const CartScreen = ({ navigation }) => {
             </View>
             <TouchableOpacity
               style={styles.checkoutButton}
-              onPress={() =>
-                navigation.navigate("Pay", {
-                  totalAmount: state.cartItems.reduce(
-                    (total, item) => total + item.price,
-                    0
-                  ),
-                })
-              }
+              onPress={handleCheckout} // Call the handleCheckout function
             >
               <Text style={styles.checkoutButtonText}>Checkout</Text>
             </TouchableOpacity>
