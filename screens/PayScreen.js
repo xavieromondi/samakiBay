@@ -12,7 +12,7 @@ import { CourierClient } from "@trycourier/courier";
 import mpesaLogo from "../assets/safaricom-mpesa.jpg";
 
 const courier = CourierClient({
-  authorizationToken: "pk_test_JR3GWWKY4R4953QPN00T7AHHNPQ0",
+  authorizationToken: "pk_prod_GMCW61E76GMAX0JGKCY78BGFKGJ0",
 });
 
 export default function PayScreen({ navigation, route }) {
@@ -42,8 +42,7 @@ export default function PayScreen({ navigation, route }) {
         message: {
           to: {
             expo: {
-              token:
-                "fYqXWLBSSe6QeBWBAJZ7Ya:APA91bF-8PNlGNtIPEeXOSPA28KQsy-53DhOt9L0XHTbM9hUZmNPY2wNbgJS80NO5soBORnn3n4nwW_ncog8STcemgbFOp5HYvBl4SnwOU8pvaTBfY3xz7d77Bf5yCHr8-mtfHCqFwIs",
+              token: "ExponentPushToken[Bq6W8XNZHxm7SL9B2G-7vC]",
             },
           },
           content: {
@@ -72,7 +71,7 @@ export default function PayScreen({ navigation, route }) {
           style={styles.input}
           placeholder="Enter number"
           keyboardType="numeric"
-          value={number}
+          value={number.toString()}
           onChangeText={handleNumberChange}
         />
       </View>

@@ -11,15 +11,15 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.myasma01.samakibay"
     },
     "android": {
       "googleServicesFile": "./android/app/src/google-services (4).json",
-
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -36,8 +36,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "25c78d14-59ce-4f3c-a105-2f2ce5773300"
+        "projectId": "80b743dc-5061-410f-9180-6c53b709226f"
       }
-    }
+    },
+    "owner": "myasma01"
   }
 }
