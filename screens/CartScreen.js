@@ -56,8 +56,11 @@ const CartScreen = ({ navigation }) => {
 
       // Navigate to the PayScreen
       navigation.navigate("Pay", {
-        orderId: orderRef.id,
-        totalAmount: order.totalAmount,
+        orderItems: state.cartItems,
+        totalAmount: state.cartItems.reduce(
+          (total, item) => total + item.price,
+          0
+        ),
       });
     } catch (error) {
       console.log("Error saving order:", error);

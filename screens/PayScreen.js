@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import { CourierClient } from "@trycourier/courier";
 import mpesaLogo from "../assets/safaricom-mpesa.jpg";
+import { collection, doc, getDoc } from "firebase/firestore";
+import { db, authentication } from "../firebase";
 
 const courier = CourierClient({
   authorizationToken: "pk_prod_GMCW61E76GMAX0JGKCY78BGFKGJ0",
@@ -29,38 +31,68 @@ export default function PayScreen({ navigation, route }) {
 
   const handlePayNowPress = async () => {
     try {
-      await sendPushNotification();
+      const userData = await fetchData(); // Retrieve the user data here
+      await sendCourierNotification(userData); // Pass the user data to the function
       navigation.navigate("Map"); // navigate to "Map" screen
     } catch (error) {
-      console.log("Error sending push notification:", error);
+      console.log("Error sending Courier notification:", error);
     }
   };
 
-  async function sendPushNotification() {
+  const fetchData = async () => {
     try {
-      const { requestId } = await courier.send({
-        message: {
-          to: {
-            expo: {
-              token: "ExponentPushToken[Bq6W8XNZHxm7SL9B2G-7vC]",
-            },
-          },
-          content: {
-            title: "You've got mail",
-            body: "Hello world!",
-          },
-          data: {
-            fakeData: "data",
+      const uid = authentication.currentUser.uid;
+      const userDocRef = doc(db, "users", uid);
+      const userDocSnapshot = await getDoc(userDocRef);
+
+      if (userDocSnapshot.exists()) {
+        const userData = userDocSnapshot.data();
+        // Use the retrieved data as your push notification payload
+        console.log(userData);
+        return userData;
+      }
+    } catch (error) {
+      console.log("Error retrieving data:", error);
+    }
+  };
+
+  async function sendCourierNotification(userData) {
+    try {
+      const token = "ExponentPushToken[Bq6W8XNZHxm7SL9B2G-7vC]";
+      const message = {
+        to: {
+          expo: {
+            token: token,
           },
         },
+        content: {
+          title: "Notification Title",
+          body: "Notification Body",
+        },
+        data: {
+          latitude: userData.latitude,
+          longitude: userData.longitude,
+          name: userData.name,
+          phone: userData.phone,
+          address: userData.address,
+          orderItems: route.params.orderItems,
+          totalPrice: route.params.totalAmount,
+        },
+      };
+
+      const { requestId } = await courier.send({
+        message: message,
       });
 
       console.log("Courier notification sent:", requestId);
     } catch (error) {
       console.log("Error sending Courier notification:", error);
-      throw error;
     }
   }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <View style={styles.container}>
