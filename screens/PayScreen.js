@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { CourierClient } from "@trycourier/courier";
 import mpesaLogo from "../assets/safaricom-mpesa.jpg";
@@ -20,6 +21,7 @@ const courier = CourierClient({
 export default function PayScreen({ navigation, route }) {
   const [number, setNumber] = useState("0797211187");
   const [amount, setAmount] = useState(route.params.totalAmount);
+  const [isLoading, setIsLoading] = useState(false); // New state variable
 
   const handleNumberChange = (text) => {
     setNumber(text);
@@ -30,12 +32,39 @@ export default function PayScreen({ navigation, route }) {
   };
 
   const handlePayNowPress = async () => {
+    setIsLoading(true); // Set isLoading to true to show the activity indicator
+
     try {
+      await makePayment(); // Call the function to make the payment
       const userData = await fetchData(); // Retrieve the user data here
       await sendCourierNotification(userData); // Pass the user data to the function
       navigation.navigate("Map"); // navigate to "Map" screen
     } catch (error) {
-      console.log("Error sending Courier notification:", error);
+      console.log("Error making payment:", error);
+    } finally {
+      setIsLoading(false); // Set isLoading back to false to hide the activity indicator
+    }
+  };
+
+  const makePayment = async () => {
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone: number,
+          amount: amount,
+        }),
+      };
+
+      const response = await fetch(
+        "https://samakibay.onrender.com/stk",
+        requestOptions
+      );
+      const data = await response.json();
+      console.log("Payment response:", data);
+    } catch (error) {
+      console.log("Error making payment:", error);
     }
   };
 
@@ -117,7 +146,11 @@ export default function PayScreen({ navigation, route }) {
         />
       </View>
       <TouchableOpacity style={styles.payButton} onPress={handlePayNowPress}>
-        <Text style={styles.payButtonText}>Pay Now</Text>
+        {isLoading ? (
+          <ActivityIndicator size="small" color="#fff" /> // Show activity indicator when isLoading is true
+        ) : (
+          <Text style={styles.payButtonText}>Pay Now</Text>
+        )}
       </TouchableOpacity>
 
       <StatusBar style="auto" />
