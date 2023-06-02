@@ -23,28 +23,39 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Log In</Text>
-      {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Button title="Log In" onPress={handleLogin} />
-      <Button
-        title="Don't have an account? Sign Up"
-        onPress={() => navigation.navigate("SingUp")}
-      />
+      <View style={styles.header}>
+        <Text style={styles.title}>Log In</Text>
+      </View>
+      <View style={styles.form}>
+        {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
+        <Text style={styles.label}>Email:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
+        <Text style={styles.label}>Password:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        <Button title="Log In" onPress={handleLogin} />
+        <Text style={styles.signupLink}>
+          Don't have an account?{" "}
+          <Text
+            style={styles.signupLinkText}
+            onPress={() => navigation.navigate("SignUp")}
+          >
+            Sign Up
+          </Text>
+        </Text>
+      </View>
     </View>
   );
 };
@@ -52,23 +63,45 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#fff",
+  },
+  header: {
+    backgroundColor: "#04a4b3",
+    paddingVertical: 20,
+    paddingHorizontal: 16,
   },
   title: {
     fontSize: 24,
-    marginBottom: 24,
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  form: {
+    padding: 16,
+  },
+  label: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 8,
   },
   input: {
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: "#ccc",
+    borderRadius: 4,
     padding: 8,
-    marginVertical: 8,
-    width: "80%",
+    marginBottom: 16,
   },
   error: {
     color: "red",
     marginBottom: 8,
+  },
+  signupLink: {
+    marginTop: 16,
+    textAlign: "center",
+  },
+  signupLinkText: {
+    color: "#006200",
+    textDecorationLine: "underline",
   },
 });
 

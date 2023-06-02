@@ -25,7 +25,6 @@ const Food = ({ name, description, price, imageUrl }) => {
 
 // Create the URL object with the URL constructor
 global.URL = URL;
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
@@ -43,33 +42,33 @@ const styles = StyleSheet.create({
     },
     elevation: 4,
   },
-  imageContainer: {
-    padding: 16,
-    backgroundColor: "#F4F4F4",
-    borderRadius: 16,
-  },
   image: {
-    width: 80,
-    height: 80,
-    resizeMode: "contain",
+    width: 100,
+    height: 100,
+    borderRadius: 12,
+    margin: 16,
   },
   infoContainer: {
     flex: 1,
-    padding: 16,
+    paddingVertical: 16,
   },
   name: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 4,
+    marginLeft: 16,
   },
   description: {
     fontSize: 14,
     marginBottom: 4,
+    color: "#777777",
+    marginLeft: 16,
   },
   price: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#007AFF",
+    marginLeft: 16,
   },
 });
 
